@@ -10,16 +10,11 @@ def roll_dices(kept_dices):
 ## Function to calculate the score of a given dice combination and print the score sheet
 def calculate_score(dice_combination):
     
-    # Total sum of the dice combination
     total_sum = sum(dice_combination)
-    
-    # frequency of each dice number
-    freq = [dice_combination.count(i) for i in range(1, 7)]
+    freq = [dice_combination.count(i) for i in range(1, 7)] # Count the frequency of each number
     max_freq = max(freq)
+    dice_set = set(dice_combination) # Get the unique numbers
     
-    # Set data structure for checking the consecutive numbers
-    dice_set = set(dice_combination)
-
     # Dictionary structure for storing the score for each category ("category_name": score)
     score_sheet = {
         "Aces": freq[0],
@@ -43,43 +38,18 @@ def calculate_score(dice_combination):
 def is_straight(dice_set, is_small):
     small_straight_cond = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}]
     large_straight_cond = [{1, 2, 3, 4, 5}, {2, 3, 4, 5, 6}]
-    if is_small:
-        return any(cond.issubset(dice_set) for cond in small_straight_cond)
-    return any(cond.issubset(dice_set) for cond in large_straight_cond)
-
-## Function to print the score sheet and calculate the total score
-def print_score(score_sheet):
-    
-    categories = [
-        "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes",
-        "Chance", "Three of a Kind", "Four of a Kind", "Full House","Small Straight", "Large Straight", "Yahtzee"
-    ]
-    
-    
-    print("+----------------------+-----------+")
-    print("|       Category       |   Score   |")
-    print("+----------------------+-----------+")
-    
-    # Print the score for each category ('-' for unrecorded categories in final score sheet)
-    for category in categories:
-        score = score_sheet.get(category, "-")
-        print(f"| {category:^20} | {score:^9} |")
-    
-    print("+----------------------+-----------+")
-    
-    total_score = sum(score_sheet.get(category, 0) for category in categories)
-    
-    return total_score
+    return any (cond.issubset(dice_set) for cond in (small_straight_cond if is_small else large_straight_cond))
 
 ## Function to play the game
 def game_start():
     
+    # Initialize the game
     round = 1
     recorded_score_sheet = {}
     kept_dices = {}
-    
     print_game_info("welcome")
     
+    # Main game loop
     while True:
         
         # Print the information of the current round and get the user input
@@ -141,7 +111,7 @@ def game_start():
             # Calculate the score of the dice combination and choose the category to record the score
             round_score_sheet = calculate_score(dices)
             available_categories = [category for category in round_score_sheet.keys() if category not in recorded_score_sheet.keys()]
-            print_score(available_categories)
+            print_game_info("score", ["round", available_categories])
             print_game_info("record")
             record_category = input("=> ")
             
@@ -155,8 +125,7 @@ def game_start():
             round += 1
             
             if round == 14:
-                total_score = print_score(recorded_score_sheet)
-                print_game_info("score", [True, total_score])
+                print_game_info("score", ["final", recorded_score_sheet])
                 
                 # Initialize the game
                 round = 1
@@ -165,8 +134,7 @@ def game_start():
         
             
         elif (option == "2"):
-            total_score = print_score(recorded_score_sheet)
-            print_game_info("score", [False, total_score])
+            print_game_info("score", ["check", recorded_score_sheet])
 
 ## Helper function to print the text information of the game
 def print_game_info(kind, items=None):
@@ -203,12 +171,33 @@ def print_game_info(kind, items=None):
         print("Choose the category that you want to record the score.")
         return
     
-    elif kind == "score": # This case, items is [is_final_round, score]
-        if items[0]:
-            print(f"Final score: {items[1]}")
-            print("Press Enter to continue...")
-        else:
-            print(f"\nCurrent score: {items[1]}")
+    elif kind == "score": # This case, items is [state, score_sheet]
+        state, score_sheet = items
+        categories = [
+        "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes",
+        "Chance", "Three of a Kind", "Four of a Kind", "Full House","Small Straight", "Large Straight", "Yahtzee"
+        ]
+    
+    
+        print("+----------------------+-----------+")
+        print("|       Category       |   Score   |")
+        print("+----------------------+-----------+")
+        
+        # Print the score for each category ('-' for unrecorded categories in final score sheet)
+        for category in categories:
+            score = score_sheet.get(category, "-")
+            print(f"| {category:^20} | {score:^9} |")
+        
+        print("+----------------------+-----------+")
+        
+        total_score = sum(score_sheet.get(category, 0) for category in categories)
+        
+        if state == "check":
+            print(f"\nCurrent score: {total_score}\n")
+        elif state == "final":
+            print(f"\nTotal score: {total_score}\n")
+        return
                 
-## Start the game              
-game_start()
+## Start the game
+if __name__ == "__main__":
+    game_start()
