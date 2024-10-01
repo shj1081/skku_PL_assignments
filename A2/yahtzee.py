@@ -40,102 +40,6 @@ def is_straight(dice_set, is_small):
     large_straight_cond = [{1, 2, 3, 4, 5}, {2, 3, 4, 5, 6}]
     return any (cond.issubset(dice_set) for cond in (small_straight_cond if is_small else large_straight_cond))
 
-## Function to play the game
-def game_start():
-    
-    # Initialize the game
-    round = 1
-    recorded_score_sheet = {}
-    kept_dices = {}
-    print_game_info("welcome")
-    
-    # Main game loop
-    while True:
-        
-        # Print the information of the current round and get the user input
-        print_game_info("round", round)
-        option = input("=> ")
-        
-        # Check if the input is either '1' or '2'
-        while option not in ('1', '2'):
-            print("\n[WARN] Invalid input. Please choose the option 1 or 2.\n")
-            option = input("=> ")
-        
-        if (option == "1"):
-            
-            # Rerolling is allowed for 3 times
-            for iteration in range(3):
-                dices = roll_dices(kept_dices)
-                while True:
-                    print_game_info("roll", dices)
-                    re_roll_state = input("=> ").strip().lower()
-
-                # Check if the input is either 'y' or 'n'
-                    if re_roll_state in ('y', 'n'):
-                        break
-                    else:
-                        print("\n[WARN] Invalid input. Please type 'y' or 'n'.\n")
-                        
-                
-                if re_roll_state == 'n':
-                    break
-
-                
-                # Get the dice numbers that the user wants to keep and update the kept dices
-                # Check if the input of kept dices is valid
-                while True:
-                    print_game_info("keep")
-                    kept_dices_input = input("=> ").strip()
-
-                    # Error case 1: Check whether input is valid numbers between 1 and 5
-                    if not kept_dices_input.replace(" ", "").isdigit():
-                        print("\n[WARN] Invalid input. Please enter numbers.\n")
-                        continue
-
-                    kept_dices_input = list(map(int, kept_dices_input.split()))
-
-                    if not all(1 <= dice <= 5 for dice in kept_dices_input):
-                        print("\n[WARN] Invalid input. Please enter numbers between 1 and 5.\n")
-                        continue
-
-                    # Error case 2: Check whether all numbers are unique
-                    if len(kept_dices_input) != len(set(kept_dices_input)):
-                        print("\n[WARN] Invalid input. Please enter different numbers.\n")
-                        continue
-
-                    break
-
-                kept_dices = {dice: dices[dice-1] for dice in kept_dices_input}
-
-                    
-            # Calculate the score of the dice combination and choose the category to record the score
-            round_score_sheet = calculate_score(dices)
-            available_categories = [category for category in round_score_sheet.keys() if category not in recorded_score_sheet.keys()]
-            print_game_info("score", ["round", available_categories])
-            print_game_info("record")
-            record_category = input("=> ")
-            
-            # If the user input is not valid (not in the category list or already recorded), then ask the user to input again
-            while record_category not in available_categories.keys():
-                print("\n[WARN] Invalid input. Please choose the category that is not recorded.\n")
-                record_category = input("=> ")
-            
-            # Record the score of the chosen category
-            recorded_score_sheet[record_category] = round_score_sheet[record_category]
-            round += 1
-            
-            if round == 14:
-                print_game_info("score", ["final", recorded_score_sheet])
-                
-                # Initialize the game
-                round = 1
-                recorded_score_sheet = {}
-                kept_dices = {}
-        
-            
-        elif (option == "2"):
-            print_game_info("score", ["check", recorded_score_sheet])
-
 ## Helper function to print the text information of the game
 def print_game_info(kind, items=None):
     
@@ -158,8 +62,7 @@ def print_game_info(kind, items=None):
         return
     
     elif kind == "roll": # This case, items is the dice combination list
-        print(f"Current dice combination: {items}\n")
-        print("Re-roll the dice? [y/n]")
+        print(f"\nCurrent dice combination: {items}\n")
         return
     
     elif kind == "keep":
@@ -197,6 +100,97 @@ def print_game_info(kind, items=None):
         elif state == "final":
             print(f"\nTotal score: {total_score}\n")
         return
+
+## Function to play the game
+def game_start():
+    
+    # Initialize the game
+    round = 1
+    recorded_score_sheet = {}
+    kept_dices = {}
+    print_game_info("welcome")
+    
+    # Main game loop
+    while True:
+        
+        print_game_info("round", round)
+        
+        # Check the user input option and validate the input
+        option = input("=> ")
+        while option not in ('1', '2'):
+            option = input("\n[WARN] Invalid input. Please choose the option 1 or 2.\n=> ")
+        
+        # option 1: Roll the dice
+        if (option == "1"):
+            
+            # Roll the dice and print the current dice combination
+            dices = roll_dices({})
+            print_game_info("roll", dices)
+            
+            # Roll the dice up to 3 times
+            for iteration in range(2):
+                
+                # Check if the user wants to reroll the dice and validate the input
+                re_roll_state = input("Re-roll the dice? [y/n]: \n=> ").strip().lower()
+                while re_roll_state not in ('y', 'n'):
+                    re_roll_state = input("\n[WARN] Invalid input. Please type 'y' or 'n'.\nRe-roll the dice? [y/n]: \n=> ").strip().lower()
+                
+                # Stop re-rolling if the user chooses 'n'
+                if re_roll_state == 'n':
+                    break
+                
+                # Get the indices of the dice that the user wants to keep and validate the input
+                while True:
+                    print_game_info("keep")
+                    kept_dices_input = input("=> ").strip()
+                    
+                    # if the input is empty, then reroll all the dices
+                    if kept_dices_input == "":
+                        break
+
+                    # digits only, numbers between 1-5, and all unique
+                    if (kept_dices_input.replace(" ", "").isdigit() and
+                        all(1 <= dice <= 5 for dice in map(int, kept_dices_input.split())) and
+                        len(set(kept_dices_input.split())) == len(kept_dices_input.split())):
+                        break
+                    print("\n[WARN] Invalid input. Please enter unique numbers between 1 and 5.\n")
+
+                # Update the kept dices
+                kept_dices = {int(dice): dices[int(dice)-1] for dice in kept_dices_input.split()}
+                
+                # re-roll the dice
+                dices = roll_dices(kept_dices)
+                print_game_info("roll", dices)
+
+                    
+            # Calculate the score of the dice combination
+            round_score_sheet = calculate_score(dices)
+            available_categories = {category:value for category, value in round_score_sheet.items() if category not in recorded_score_sheet}
+            print_game_info("score", ["round", available_categories])
+            print_game_info("record")
+            
+            # Choose the category to record the score and validate the input
+            record_category = input("=> ")
+            while record_category not in available_categories.keys():
+                record_category = input("\n[WARN] Invalid input. Please choose the category that is not recorded.\n=> ")
+            
+            # Record the score of the chosen category
+            recorded_score_sheet[record_category] = round_score_sheet[record_category]
+            round += 1
+            
+            # Check if the game is over
+            if round == 14:
+                print_game_info("score", ["final", recorded_score_sheet])
+                input("Press Enter to start a new game.")
+                
+                # Initialize the game and start a new game
+                round = 1
+                recorded_score_sheet = {}
+                kept_dices = {}
+        
+        # option 2: Check the current score sheet
+        elif (option == "2"):
+            print_game_info("score", ["check", recorded_score_sheet])
                 
 ## Start the game
 if __name__ == "__main__":
