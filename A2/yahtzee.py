@@ -7,15 +7,21 @@ def roll_dices(kept_dices):
     dices = [randint(1, 6) if i not in kept_dices else kept_dices[i] for i in range(1,6)]
     return dices
 
-# Function to calculate the score of a given dice combination and print the score sheet
+# Helper Function to calculate the score of a given dice combination and print the score sheet
 def calculate_score(dice_combination):
     
-    # Dictionary structure for storing the score for each category ("category_name": score)
-    score_sheet = {}
+    # Total sum of the dice combination
+    total_sum = sum(dice_combination)
     
-    # Calculate the score for each category
     # frequency of each dice number
     freq = [dice_combination.count(i) for i in range(1, 7)]
+    max_freq = max(freq)
+    
+    # Set data structure for checking the consecutive numbers
+    dice_set = set(dice_combination)
+
+    # Dictionary structure for storing the score for each category ("category_name": score)
+    score_sheet = {}
     
     # Upper Section
     score_sheet["Aces"] = freq[0]
@@ -26,32 +32,34 @@ def calculate_score(dice_combination):
     score_sheet["Sixes"] = freq[5] * 6
     
     # Lower Section
-    score_sheet["Chance"] = sum(dice_combination)
-    score_sheet["Three of a Kind"] = sum(dice_combination) if max(freq) >= 3 else 0
-    score_sheet["Four of a Kind"] = sum(dice_combination) if max(freq) >= 4 else 0
+    score_sheet["Chance"] = total_sum
+    score_sheet["Three of a Kind"] = total_sum if max_freq >= 3 else 0
+    score_sheet["Four of a Kind"] = total_sum if max_freq >= 4 else 0
     score_sheet["Full House"] = 25 if 3 in freq and 2 in freq else 0
-    score_sheet["Small Straight"] = 30 if is_straight(dice_combination, True) else 0
-    score_sheet["Large Straight"] = 40 if is_straight(dice_combination, False) else 0
-    score_sheet["Yahtzee"] = 50 if max(freq) == 5 else 0
+    score_sheet["Small Straight"] = 30 if is_straight(dice_set, True) else 0
+    score_sheet["Large Straight"] = 40 if is_straight(dice_set, False) else 0
+    score_sheet["Yahtzee"] = 50 if max_freq == 5 else 0
     
     return score_sheet
 
-# Helper function to check if a dice combination is a straight (small or large)
-def is_straight(dice_combination, is_small):
-    
-    # Small straight: 4 consecutive numbers
-    if is_small:
-        small_straight_condition =[[1,2,3,4], [2,3,4,5], [3,4,5,6]]
-        if dice_combination[0:4] in small_straight_condition or dice_combination[1:5] in small_straight_condition:
-            return True
-        return False
+# Function to check the straight condition of the dice combination (Small Straight and Large Straight)
+def is_straight(dice_set, is_small):
         
-    # Large straight: 5 consecutive numbers
-    else:
-        large_straight_condition = [[1,2,3,4,5], [2,3,4,5,6]]
-        if dice_combination in large_straight_condition:
-            return True
-        return False
+        # Small Straight
+        if is_small:
+            small_straight_cond = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}]
+            for cond in small_straight_cond:
+                if cond.issubset(dice_set):
+                    return True
+            return False
+        
+        # Large Straight
+        else:
+            large_straight_cond = [{1, 2, 3, 4, 5}, {2, 3, 4, 5, 6}]
+            for cond in large_straight_cond:
+                if cond.issubset(dice_set):
+                    return True
+            return False
 
 # Function to choose the unrecorded category and record the score
 def record_score(score_sheet):
@@ -129,13 +137,13 @@ def test_calculate_score():
     print(f"Full House case")
     
     # Test case 4: Small Straight (e.g., four consecutive numbers)
-    dice_combination = [1, 2, 3, 4, 6]
+    dice_combination = [1, 6, 3, 4, 2]
     result = calculate_score(dice_combination)
     total_score = check_score(result)
     print(f"Small Straight case")
     
     # Test case 5: Large Straight (e.g., five consecutive numbers)
-    dice_combination = [2, 3, 4, 5, 6]
+    dice_combination = [6, 4, 5, 3, 2]
     result = calculate_score(dice_combination)
     total_score = check_score(result)
     print(f"Large Straight case")
