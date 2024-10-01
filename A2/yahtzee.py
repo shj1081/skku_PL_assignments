@@ -1,13 +1,13 @@
-# For random number generation
+## For random number generation
 from random import randint
 
-# Function to roll 5 dice except for the ones that are kept
+## Function to roll 5 dice except for the ones that are kept
 def roll_dices(kept_dices):
     
     dices = [randint(1, 6) if i not in kept_dices else kept_dices[i] for i in range(1,6)]
     return dices
 
-# Helper Function to calculate the score of a given dice combination and print the score sheet
+## Function to calculate the score of a given dice combination and print the score sheet
 def calculate_score(dice_combination):
     
     # Total sum of the dice combination
@@ -42,7 +42,7 @@ def calculate_score(dice_combination):
     
     return score_sheet
 
-# Function to check the straight condition of the dice combination (Small Straight and Large Straight)
+## Helper function to check the straight condition of the dice combination (Small Straight and Large Straight)
 def is_straight(dice_set, is_small):
         
         # Small Straight
@@ -61,7 +61,7 @@ def is_straight(dice_set, is_small):
                     return True
             return False
 
-# Function to print the score sheet and calculate the total score
+## Function to print the score sheet and calculate the total score
 def print_score(score_sheet):
     
     categories = score_sheet.keys()
@@ -81,7 +81,8 @@ def print_score(score_sheet):
     
     return total_score
 
-# Function to play the game
+## Function to play the game
 def game_start():
+    
     
     return
