@@ -61,19 +61,10 @@ def is_straight(dice_set, is_small):
                     return True
             return False
 
-# Function to choose the unrecorded category and record the score
-def record_score(score_sheet):
-    return
-
-# Function to check the score sheet and print the score table
-def check_score(score_sheet):
+# Function to print the score sheet and calculate the total score
+def print_score(score_sheet):
     
-    # All categories (unrecorded categories also should be printed)
-    categories = [
-        "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", 
-        "Chance", "Three of a Kind", "Four of a Kind", 
-        "Full House", "Small Straight", "Large Straight", "Yahtzee"
-    ]
+    categories = score_sheet.keys()
     
     total_score = sum(score_sheet.get(category, 0) for category in categories)
     
@@ -121,46 +112,43 @@ def test_calculate_score():
     # Test case 1: Three of a Kind
     dice_combination = [3, 3, 3, 1, 5]
     result = calculate_score(dice_combination)
-    total_score = check_score(result)
+    total_score = print_score(result)
     print(f"Three of a Kind case")
     
     # Test case 2: Four of a Kind
     dice_combination = [2, 2, 2, 2, 6]
     result = calculate_score(dice_combination)
-    total_score = check_score(result)
+    total_score = print_score(result)
     print(f"Four of a Kind case")
     
     # Test case 3: Full House (e.g., two of one number and three of another)
     dice_combination = [4, 4, 6, 6, 6]
     result = calculate_score(dice_combination)
-    total_score = check_score(result)
+    total_score = print_score(result)
     print(f"Full House case")
     
     # Test case 4: Small Straight (e.g., four consecutive numbers)
     dice_combination = [1, 6, 3, 4, 2]
     result = calculate_score(dice_combination)
-    total_score = check_score(result)
+    total_score = print_score(result)
     print(f"Small Straight case")
     
     # Test case 5: Large Straight (e.g., five consecutive numbers)
     dice_combination = [6, 4, 5, 3, 2]
     result = calculate_score(dice_combination)
-    total_score = check_score(result)
+    total_score = print_score(result)
     print(f"Large Straight case")
     
     # Test case 6: Yahtzee (five of a kind)
     dice_combination = [5, 5, 5, 5, 5]
     result = calculate_score(dice_combination)
-    total_score = check_score(result)
+    total_score = print_score(result)
     print(f"Yahtzee case")
     
     # Test case 7: Chance (sum of all dice)
     dice_combination = [1, 2, 4, 5, 6]
     result = calculate_score(dice_combination)
-    total_score = check_score(result)
+    total_score = print_score(result)
     print(f"Chance case")
 
     return
-
-
-test_calculate_score()
