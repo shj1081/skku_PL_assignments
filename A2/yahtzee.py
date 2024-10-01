@@ -3,9 +3,7 @@ from random import randint
 
 ## Function to roll 5 dice except for the ones that are kept
 def roll_dices(kept_dices):
-    
-    dices = [randint(1, 6) if i not in kept_dices else kept_dices[i] for i in range(1,6)]
-    return dices
+    return [randint(1, 6) if i not in kept_dices else kept_dices[i] for i in range(1,6)]
 
 ## Function to calculate the score of a given dice combination and print the score sheet
 def calculate_score(dice_combination):
@@ -38,7 +36,7 @@ def calculate_score(dice_combination):
 def is_straight(dice_set, is_small):
     small_straight_cond = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}]
     large_straight_cond = [{1, 2, 3, 4, 5}, {2, 3, 4, 5, 6}]
-    return any (cond.issubset(dice_set) for cond in (small_straight_cond if is_small else large_straight_cond))
+    return any(cond.issubset(dice_set) for cond in (small_straight_cond if is_small else large_straight_cond))
 
 ## Helper function to print the text information of the game
 def print_game_info(kind, items=None):
@@ -107,7 +105,6 @@ def game_start():
     # Initialize the game
     round = 1
     recorded_score_sheet = {}
-    kept_dices = {}
     print_game_info("welcome")
     
     # Main game loop
@@ -128,7 +125,7 @@ def game_start():
             print_game_info("roll", dices)
             
             # Roll the dice up to 3 times
-            for iteration in range(2):
+            for roll in range(2):
                 
                 # Check if the user wants to reroll the dice and validate the input
                 re_roll_state = input("Re-roll the dice? [y/n]: \n=> ").strip().lower()
@@ -153,7 +150,7 @@ def game_start():
                         all(1 <= dice <= 5 for dice in map(int, kept_dices_input.split())) and
                         len(set(kept_dices_input.split())) == len(kept_dices_input.split())):
                         break
-                    print("\n[WARN] Invalid input. Please enter unique numbers between 1 and 5.\n")
+                    print("\n[WARN] Invalid input. Please enter unique numbers between 1 and 5. (Just Enter to re-roll all the dice)\n")
 
                 # Update the kept dices
                 kept_dices = {int(dice): dices[int(dice)-1] for dice in kept_dices_input.split()}
