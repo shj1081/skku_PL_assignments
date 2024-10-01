@@ -196,7 +196,7 @@ def game_start():
             recorded_score_sheet[record_category] = round_score_sheet[record_category]
             player_scores[current_player - 1] = recorded_score_sheet
             
-            # Switch player in two-player mode
+            # Switch player in two-player mode and increment the round based on the current player
             if mode == '2':
                 current_player = 1 if current_player == 2 else 2
                 round += 1 if current_player == 1 else 0
