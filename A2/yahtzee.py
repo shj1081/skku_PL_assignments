@@ -14,16 +14,16 @@ def calculate_score(dice_combination):
     score_sheet = {}
     
     # Calculate the score for each category
-    # Upper Section
-    score_sheet["Aces"] = dice_combination.count(1)
-    score_sheet["Twos"] = dice_combination.count(2) * 2
-    score_sheet["Threes"] = dice_combination.count(3) * 3
-    score_sheet["Fours"] = dice_combination.count(4) * 4
-    score_sheet["Fives"] = dice_combination.count(5) * 5
-    score_sheet["Sixes"] = dice_combination.count(6) * 6
-    
     # frequency of each dice number
     freq = [dice_combination.count(i) for i in range(1, 7)]
+    
+    # Upper Section
+    score_sheet["Aces"] = freq[0]
+    score_sheet["Twos"] = freq[1] * 2
+    score_sheet["Threes"] = freq[2] * 3
+    score_sheet["Fours"] = freq[3] * 4
+    score_sheet["Fives"] = freq[4] * 5
+    score_sheet["Sixes"] = freq[5] * 6
     
     # Lower Section
     score_sheet["Chance"] = sum(dice_combination)
