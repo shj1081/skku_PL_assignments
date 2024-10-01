@@ -1,8 +1,8 @@
-# import all functions from yahtzee.py
+## import all functions from yahtzee.py
 from yahtzee import *
 
-## Testing 
-# Function for testing the roll_dices function
+### Testing 
+## Function for testing the roll_dices function
 def test_roll_dices():
     
     # Test case 1: No dice is kept
@@ -22,7 +22,7 @@ def test_roll_dices():
     
     return
 
-# Function for testing the calculate_score function and check_score function
+## Function for testing the calculate_score function, check_score function, and print_score function
 def test_calculate_score():
     
     # Test case 1: Three of a Kind
@@ -68,5 +68,3 @@ def test_calculate_score():
     print(f"Chance case")
 
     return
-
-test_calculate_score()

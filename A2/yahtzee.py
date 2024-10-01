@@ -189,7 +189,7 @@ def print_game_info(kind, items=None):
         print("2. Check the current score sheet")
         return
     
-    elif kind == "roll": # This case, items is the dice combination
+    elif kind == "roll": # This case, items is the dice combination list
         print(f"Current dice combination: {items}\n")
         print("Re-roll the dice? [y/n]")
         return
