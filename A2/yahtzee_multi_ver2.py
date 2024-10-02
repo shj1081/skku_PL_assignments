@@ -219,9 +219,11 @@ class YahtzeeGame:
                 print(f"\nPlayer {player + 1}'s score:\n")
                 self.print_score_table(self.recorded_score_sheet[player])
                 print(f"\n{state} score: {final_scores[player]}")
-            print(
-                f"\n\nPlayer {1 if final_scores[0] > final_scores[1] else 2} wins!"
-            )
+                
+            if (self.current_round == 14):                
+                print(
+                    f"\n\nPlayer {1 if final_scores[0] > final_scores[1] else 2} wins!"
+                )
         return
 
     """
