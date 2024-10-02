@@ -51,12 +51,15 @@ class YahtzeeGame:
 
     ## Function to get valid input
     def get_valid_input(self, valid_cond, error_message, prompt="=> ", is_numeric_list=False):
-        if is_numeric_list == False:  # valid_cond is a list of valid input strings
+        # valid_cond is a list of valid input strings
+        if is_numeric_list == False:
             user_input = input(f"{prompt}").strip()
             while user_input not in valid_cond:
                 user_input = input(f"\n[WARN] Invalid input. {error_message}\n{prompt}").strip()
             return user_input
-        else:  # valid_cond is not used, is_numeric_list is True
+        
+        # valid_cond is not used, is_numeric_list is True
+        else:
             user_input = input(f"{prompt}").strip()
             while True:
                 user_input_list = user_input.split()
@@ -74,6 +77,7 @@ class YahtzeeGame:
             "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes",
             "Chance", "Three of a Kind", "Four of a Kind", "Full House", "Small Straight", "Large Straight", "Yahtzee"
         ]
+        
         # Print the score sheet in a tabular format
         print(
             "+----------------------+-----------+\n"
@@ -188,6 +192,7 @@ class YahtzeeGame:
 
     ## Function to check the end of the game
     def check_end_game(self):
+        # after the player's (player 2 in 2-player mode) turn end in round 14, round becomes 14
         if self.current_round == 14:
             self.print_score_info()
             input("Press Enter to start a new game.")
@@ -196,15 +201,18 @@ class YahtzeeGame:
 
     ## Function to whole score information
     def print_score_info(self):
+        # Define the state of the game (Current or Final)
         if self.current_round < 14:
             state = "Current"
         else:
             state = "Final"
             print(f"\nGame Over! Final Scores:\n")
 
+        # Print the score sheet of the player(s) and the total score
         if self.game_mode == 1:
             self.print_score_table(self.recorded_score_sheet[0])
             print(f"\n{state} score: {sum(self.recorded_score_sheet[0].values())}")
+            
         else:
             final_scores = [sum(score_sheet.values()) for score_sheet in self.recorded_score_sheet]
             for player in range(2):
