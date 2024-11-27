@@ -1,0 +1,26 @@
+[
+    {
+        "time": "2024-11-20 11:06:18",
+        "type": "Transfer",
+        "from": "user2",
+        "to": "user1",
+        "amount": 57.0
+    },
+    {
+        "time": "2024-11-20 11:05:32",
+        "type": "Transfer",
+        "from": "user1",
+        "to": "user2",
+        "amount": 35.0
+    },
+    {
+        "time": "2024-11-20 11:05:00",
+        "type": "Deposit",
+        "amount": 45.0
+    },
+    {
+        "time": "2024-11-20 11:04:38",
+        "type": "Withdraw",
+        "amount": 10.0
+    }
+]
