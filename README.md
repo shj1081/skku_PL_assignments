@@ -17,7 +17,7 @@ This repository contains implementations of several programming language assignm
 ### A4: Random Stats & Primes
 
 - **Objective:** Solve mathematical problems using Python.
-- **Grade:** 95/100
+- **Grade:** full score
 - **Key Features:**
   - **RandomStats.py:** Generate 200 random numbers, sort them, categorize counts, and display results as a star graph.
   - **Sum of Integers:** Recursive function to calculate the sum of the first `n` integers.
